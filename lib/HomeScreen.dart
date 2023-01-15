@@ -12,15 +12,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TextEditingController emailcontroller = TextEditingController();
-  TextEditingController namecontroller = TextEditingController();
-  void login(String email, name) async {
+  TextEditingController passwordcontroller = TextEditingController();
+
+  void login(String email, password) async {
     try {
-      Response response = await post(
-          Uri.parse("https://kejubayer.com/api/login"),
-          body: {'email': email, 'password': name});
+      Response response =
+          await post(Uri.parse("https://kejubayer.com/api/login"), body: {
+        'email': email,
+        'password': password,
+      });
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-        print(data["token"]);
+        print(data['authorisation']['token']);
         print("login successfull");
       } else {
         print("Login failed");
@@ -47,14 +50,14 @@ class _HomePageState extends State<HomePage> {
             children: [
               TextFormField(
                 controller: emailcontroller,
-                decoration: InputDecoration(hintText: "Name"),
+                decoration: InputDecoration(hintText: "Email"),
               ),
               const SizedBox(
                 height: 20,
               ),
               TextFormField(
-                controller: namecontroller,
-                decoration: InputDecoration(hintText: "Email"),
+                controller: passwordcontroller,
+                decoration: InputDecoration(hintText: "password"),
               ),
               const SizedBox(
                 height: 20,
@@ -62,7 +65,7 @@ class _HomePageState extends State<HomePage> {
               GestureDetector(
                 onTap: (() {
                   login(emailcontroller.text.toString(),
-                      namecontroller.text.toString());
+                      passwordcontroller.text.toString());
                 }),
                 child: Container(
                   height: 40,
